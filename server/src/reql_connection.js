@@ -60,7 +60,13 @@ class ReqlConnection {
       logger.info(`Connecting to RethinkDB: ${this._host}:${this._port}`);
       this._hasRetried = true;
     }
-    r.connect({ host: this._host, port: this._port, db: this._project_name })
+      const connectOpts = {
+          host: this._host,
+          port: this._port,
+          db: this._project_name,
+          password: process.env.RDB_PASSWORD
+      };
+    r.connect(connectOpts)
      .then((conn) => {
        logger.debug('Connection to RethinkDB established.');
        conn.once('close', () => {
